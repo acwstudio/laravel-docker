@@ -1,0 +1,112 @@
+version: '3'
+services:
+  # App php-fpm service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_ENV: ${APP_ENV}
+        PHP_VERSION: ${PHP_VERSION}
+        REMOTE_WORKING_DIR: ${REMOTE_WORKING_DIR}
+    image: laravel/app
+    container_name: ${APP_NAME}_app
+    restart: unless-stopped
+    tty: true
+    working_dir: ${REMOTE_WORKING_DIR}
+    volumes:
+      - ${LOCAL_WORKING_DIR}:${REMOTE_WORKING_DIR}
+    networks:
+      - app-network
+
+  #Nginx Service
+  nginx:
+    image: nginx:alpine
+    container_name: ${APP_NAME}_nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8000:80"
+      - "443:443"
+    volumes:
+      - ./project/:/var/www/
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./nginx/ssl/:/etc/nginx/ssl/
+    networks:
+      - app-network
+
+    #MySQL Service
+  db:
+    image: mysql:5.7
+    container_name: ${APP_NAME}_db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      #MYSQL_USER: ${MYSQL_USER}
+      #MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+#    volumes:
+#      - mysqldata:/var/lib/mysql/
+    networks:
+      - app-network
+
+
+#  database:
+#    image: mysql:5.7.29
+#    container_name: ${APP_NAME}_mysql
+#    restart: always
+#    environment:
+#      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+#      MYSQL_DATABASE: ${MYSQL_DATABASE}
+#      MYSQL_USER: ${MYSQL_USER}
+#      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+#    ports:
+#      - "${PORT_DATABASE}:3306"
+#    volumes:
+#      - ./data/db/mysql:/var/lib/mysql
+#      - "./etc/mysql:/etc/mysql/conf.d"
+#    networks:
+#      - app-network
+
+#  mailcatcher:
+#    image: schickling/mailcatcher
+#    container_name: ${APP_NAME}_mailcatcher
+#    ports:
+#      - "${PORT_MAILCATCHER}:1080"
+#    networks:
+#      - app-network
+
+#  redis:
+#    container_name: ${APP_NAME}_redis
+#    image: redis
+#    ports:
+#      - "${PORT_REDIS}:6379"
+#    volumes:
+#      - "./data/redis:/data"
+#    restart: always
+#    networks:
+#      - app-network
+
+#  myadmin:
+#    image: phpmyadmin/phpmyadmin
+#    container_name: ${APP_NAME}_phpmyadmin
+#    ports:
+#      - ${PORT_PHPMYADMIN}:80
+#    restart: always
+#    links:
+#      - database:db
+#    depends_on:
+#      - database
+
+#Volumes
+volumes:
+  mysqldata:
+    driver: local
+
+# Docker Networks
+networks:
+  app-network:
+    driver: bridge
