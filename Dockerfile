@@ -30,13 +30,18 @@ RUN apk update && apk add --no-cache $PHPIZE_DEPS \
    php7-dom \
    php7-session \
    php7-zlib \
-   php7-iconv
+   php7-iconv \
+   #freetype \
+   freetype-dev \
+   #libjpeg-turbo \
+   libjpeg-turbo-dev \
+   #libpng \
+   libpng-dev && \
+   docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ && \
+   docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) gd
 
 # Install extensions
-RUN docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl
-#RUN docker-php-ext-enable pdo_mysql  mbstring zip exif pcntl
-#RUN docker-php-ext-install exif
-#RUN docker-php-ext-enable exif
+RUN docker-php-ext-install pdo pdo_mysql zip exif pcntl
 
 # install xdebug and enable it if the development environment is local
 #RUN if [ $APP_ENV = "local" ]; then \

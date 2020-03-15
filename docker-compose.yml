@@ -16,6 +16,7 @@ services:
     working_dir: ${REMOTE_WORKING_DIR}
     volumes:
       - ${LOCAL_WORKING_DIR}:${REMOTE_WORKING_DIR}
+      #- ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
       - app-network
 
