@@ -6,6 +6,7 @@ FROM php:$PHP_VERSION-fpm-alpine
 
 # Application environment variable
 ARG APP_ENV
+ARG PHP_VERSION_APP
 
 # Remote working directory environment variable
 ARG REMOTE_WORKING_DIR
@@ -30,15 +31,25 @@ RUN apk update && apk add --no-cache $PHPIZE_DEPS \
    php7-dom \
    php7-session \
    php7-zlib \
-   php7-iconv \
-   #freetype \
+   php7-iconv
+
+RUN if [ "$PHP_VERSION_APP" = "7.4" ]; then \
+   apk update && apk add --no-cache $PHPIZE_DEPS \
    freetype-dev \
-   #libjpeg-turbo \
    libjpeg-turbo-dev \
-   #libpng \
    libpng-dev && \
    docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ && \
-   docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) gd
+   docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) gd; \
+fi
+
+RUN if [ "$PHP_VERSION_APP" = "7.2" ]; then \
+    apk update && apk add --no-cache $PHPIZE_DEPS \
+    freetype \
+    libjpeg-turbo-dev \
+    libpng-dev && \
+    docker-php-ext-configure gd --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/ && \
+    docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) gd; \
+fi
 
 # Install extensions
 RUN docker-php-ext-install pdo pdo_mysql zip exif pcntl

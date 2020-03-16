@@ -7,6 +7,7 @@ services:
       dockerfile: Dockerfile
       args:
         APP_ENV: ${APP_ENV}
+        PHP_VERSION_APP: ${PHP_VERSION}
         PHP_VERSION: ${PHP_VERSION}
         REMOTE_WORKING_DIR: ${REMOTE_WORKING_DIR}
     image: laravel/app
@@ -14,6 +15,8 @@ services:
     restart: unless-stopped
     tty: true
     working_dir: ${REMOTE_WORKING_DIR}
+    env_file:
+      - .env
     volumes:
       - ${LOCAL_WORKING_DIR}:${REMOTE_WORKING_DIR}
       #- ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
