@@ -7,9 +7,11 @@ FROM php:$PHP_VERSION-fpm-alpine
 # Application environment variable
 ARG APP_ENV
 ARG PHP_VERSION_APP
+ARG APP_SRC
 
 # Remote working directory environment variable
 ARG REMOTE_WORKING_DIR
+ARG LOCAL_WORKING_DIR
 
 # Install Additional dependencies
 RUN apk update && apk add --no-cache $PHPIZE_DEPS \
@@ -79,5 +81,6 @@ USER www-data
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
 
+#RUN ln -snf $APP_SRC $LOCAL_WORKING_DIR
 # Run php-fpm
 CMD ["php-fpm"]
