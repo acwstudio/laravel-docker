@@ -11,8 +11,8 @@ services:
         PHP_VERSION: ${PHP_VERSION}
         REMOTE_WORKING_DIR: ${REMOTE_WORKING_DIR}
         LOCAL_WORKING_DIR: ${LOCAL_WORKING_DIR}
-        APP_SRC: ${APP_SRC}
-    image: laravel/app
+#        APP_SRC: ${APP_SRC}
+    image: laravel/${APP_NAME}
     container_name: ${APP_NAME}_app
     restart: unless-stopped
     tty: true
