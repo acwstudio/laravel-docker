@@ -1,6 +1,6 @@
 # laravel-docker
 
-1. clone repository `git clone --branch=master https://github.com/acwstudio/laravel-docker.git name_your_docker_project`
+1. clone repository `# git clone --branch=master https://github.com/acwstudio/laravel-docker.git name_your_docker_project`
 2. `# cd name_your_project`
 3. `# cp .env.examole .env`
 4. edit .env file
