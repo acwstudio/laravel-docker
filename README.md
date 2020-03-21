@@ -7,3 +7,5 @@
 5. create symlink to folder with your Laravel-app `# ln -snf /path/to/your/laravel-project` project
 6. create images `# docker-compose build`
 7. create containers`# docker-compose up -d`
+8. look at created images `# docker images`
+9. look at created containers `# docker ps -a`
