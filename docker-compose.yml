@@ -36,7 +36,7 @@ services:
       - "${PORT_HTTP}:80"
       - "${PORT_HTTPS}:443"
     volumes:
-      - ./project/:/var/www/
+      - ${LOCAL_WORKING_DIR}:/var/www/
       - ./nginx/conf.d/:/etc/nginx/conf.d/
       - ./nginx/ssl/:/etc/nginx/ssl/
     networks:
