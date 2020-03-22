@@ -21,6 +21,7 @@ services:
       - .env
     volumes:
       - ${LOCAL_WORKING_DIR}:${REMOTE_WORKING_DIR}
+#      - ./project:
       #- ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
     #command: sh -c "ln -snf $APP_SRC $LOCAL_WORKING_DIR"
     networks:
@@ -55,8 +56,8 @@ services:
       #MYSQL_USER: ${MYSQL_USER}
       #MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-#    volumes:
-#      - mysqldata:/var/lib/mysql/
+    volumes:
+      - mysqldata:/var/lib/mysql/
     networks:
       - app-network
 
