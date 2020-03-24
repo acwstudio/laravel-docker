@@ -9,21 +9,19 @@ services:
         APP_ENV: ${APP_ENV}
         PHP_VERSION_APP: ${PHP_VERSION}
         PHP_VERSION: ${PHP_VERSION}
-        REMOTE_WORKING_DIR: ${REMOTE_WORKING_DIR}
-        LOCAL_WORKING_DIR: ${LOCAL_WORKING_DIR}
-        APP_SRC: ${APP_SRC}
+        REMOTE_LARAVEL_DIR: ${REMOTE_LARAVEL_DIR}
+        LOCAL_LARAVEL_DIR: ${LOCAL_LARAVEL_DIR}
     image: laravel/${APP_NAME}
     container_name: ${APP_NAME}_app
     restart: unless-stopped
     tty: true
-    working_dir: ${REMOTE_WORKING_DIR}
+    working_dir: ${REMOTE_LARAVEL_DIR}
     env_file:
       - .env
     volumes:
-      - ${LOCAL_WORKING_DIR}:${REMOTE_WORKING_DIR}
-#      - ./project:
-      #- ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
-    #command: sh -c "ln -snf $APP_SRC $LOCAL_WORKING_DIR"
+      - ${LOCAL_LARAVEL_STORAGE_DIR}:/var/www/storage
+      - ${LOCAL_LARAVEL_EXTERNAL_DIR}:/var/ext-configs
+      - ${LOCAL_LARAVEL_DIR}:${REMOTE_LARAVEL_DIR}
     networks:
       - app-network
 
@@ -37,7 +35,7 @@ services:
       - "${PORT_HTTP}:80"
       - "${PORT_HTTPS}:443"
     volumes:
-      - ${LOCAL_WORKING_DIR}:/var/www/
+      - ${LOCAL_LARAVEL_DIR}:/var/www/
       - ./nginx/conf.d/:/etc/nginx/conf.d/
       - ./nginx/ssl/:/etc/nginx/ssl/
     networks:
@@ -94,6 +92,8 @@ services:
 #Volumes
 volumes:
   mysqldata:
+    driver: local
+  laravel:
     driver: local
 
 # Docker Networks
