@@ -7,11 +7,6 @@ FROM php:$PHP_VERSION-fpm-alpine
 # Application environment variable
 ARG APP_ENV
 ARG PHP_VERSION_APP
-ARG APP_SRC
-
-# Remote working directory environment variable
-ARG REMOTE_WORKING_DIR
-ARG LOCAL_WORKING_DIR
 
 # Install Additional dependencies
 RUN apk update && apk add --no-cache $PHPIZE_DEPS \
@@ -73,7 +68,8 @@ RUN rm -rf /var/cache/apk/*
 RUN apk add shadow && usermod -u 1000 www-data && groupmod -g 1000 www-data
 
 # Copy existing application directory permissions
-COPY --chown=www-data:www-data . $REMOTE_WORKING_DIR
+#COPY --chown=www-data:www-data . $REMOTE_WORKING_DIR
+#COPY --chown=www-data:www-data . /var/local/storage/
 
 # Change current user to www
 USER www-data
