@@ -7,6 +7,8 @@ FROM php:$PHP_VERSION-fpm-alpine
 # Application environment variable
 ARG APP_ENV
 ARG PHP_VERSION_APP
+ARG LOCAL_LARAVEL_DIR
+ARG REMOTE_LARAVEL_DIR
 
 # Install Additional dependencies
 RUN apk update && apk add --no-cache $PHPIZE_DEPS \
