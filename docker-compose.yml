@@ -19,8 +19,8 @@ services:
     env_file:
       - .env
     volumes:
-      - ${LOCAL_LARAVEL_STORAGE_DIR}:/var/storage
-      - ${LOCAL_LARAVEL_EXTERNAL_DIR}:/var/ext-configs
+#      - ${LOCAL_LARAVEL_STORAGE_DIR}:/var/storage
+#      - ${LOCAL_LARAVEL_EXTERNAL_DIR}:/var/ext-configs
       - ${LOCAL_LARAVEL_DIR}:${REMOTE_LARAVEL_DIR}
     networks:
       - app-network
