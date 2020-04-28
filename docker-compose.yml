@@ -1,102 +1,125 @@
-version: '3'
+version: '3.5'
 services:
-  # App php-fpm service
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        APP_ENV: ${APP_ENV}
-        PHP_VERSION_APP: ${PHP_VERSION}
-        PHP_VERSION: ${PHP_VERSION}
-        REMOTE_LARAVEL_DIR: ${REMOTE_LARAVEL_DIR}
-        LOCAL_LARAVEL_DIR: ${LOCAL_LARAVEL_DIR}
-    image: laravel/${APP_NAME}
-    container_name: ${APP_NAME}_app
-    restart: unless-stopped
-    tty: true
-    working_dir: ${REMOTE_LARAVEL_DIR}
-    env_file:
-      - .env
-    volumes:
-#      - ${LOCAL_LARAVEL_STORAGE_DIR}:/var/storage
-#      - ${LOCAL_LARAVEL_EXTERNAL_DIR}:/var/ext-configs
-      - ${LOCAL_LARAVEL_DIR}:${REMOTE_LARAVEL_DIR}
-    networks:
-      - app-network
-
-  #Nginx Service
-  nginx:
-    image: nginx:alpine
-    container_name: ${APP_NAME}_nginx
-    restart: unless-stopped
-    tty: true
-    ports:
-      - "${PORT_HTTP}:80"
-      - "${PORT_HTTPS}:443"
-    volumes:
-      - ${LOCAL_LARAVEL_DIR}:/var/www/
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
-      - ./nginx/ssl/:/etc/nginx/ssl/
-    networks:
-      - app-network
-
-    #MySQL Service
-  db:
+  # Database
+  database:
     image: mysql:5.7
-    container_name: ${APP_NAME}_db
-    restart: unless-stopped
-    tty: true
-    ports:
-      - "${PORT_DATABASE}:3306"
+    container_name: ${APP_NAME}_mysql
+    restart: always
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      #MYSQL_USER: ${MYSQL_USER}
-      #MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - ${PORT_DATABASE}:3306
     volumes:
-      - mysqldata:/var/lib/mysql/
+      - "./data/db/mysql:/var/lib/mysql"
+      - "./etc/mysql:/etc/mysql/conf.d"
     networks:
-      - app-network
+      - net1
 
-#  mailcatcher:
-#    image: schickling/mailcatcher
-#    container_name: ${APP_NAME}_mailcatcher
-#    ports:
-#      - "${PORT_MAILCATCHER}:1080"
-#    networks:
-#      - app-network
-
-#  redis:
-#    container_name: ${APP_NAME}_redis
-#    image: redis
-#    ports:
-#      - "${PORT_REDIS}:6379"
-#    volumes:
-#      - "./data/redis:/data"
-#    restart: always
-#    networks:
-#      - app-network
-
-#  myadmin:
-#    image: phpmyadmin/phpmyadmin
-#    container_name: ${APP_NAME}_phpmyadmin
-#    ports:
-#      - ${PORT_PHPMYADMIN}:80
-#    restart: always
-#    links:
-#      - database:db
-#    depends_on:
-#      - database
-
-#Volumes
-volumes:
-  mysqldata:
-    driver: local
-  laravel:
-    driver: local
-
-# Docker Networks
+# Networks
 networks:
-  app-network:
-    driver: bridge
+  net1:
+    name: ${APP_NAME}_net
+
+#  # App php-fpm service
+#  app:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#      args:
+#        APP_ENV: ${APP_ENV}
+#        PHP_VERSION_APP: ${PHP_VERSION}
+#        PHP_VERSION: ${PHP_VERSION}
+#        REMOTE_LARAVEL_DIR: ${REMOTE_LARAVEL_DIR}
+#        LOCAL_LARAVEL_DIR: ${LOCAL_LARAVEL_DIR}
+#    image: laravel/${APP_NAME}
+#    container_name: ${APP_NAME}_app
+#    restart: unless-stopped
+#    tty: true
+#    working_dir: ${REMOTE_LARAVEL_DIR}
+#    env_file:
+#      - .env
+#    volumes:
+##      - ${LOCAL_LARAVEL_STORAGE_DIR}:/var/storage
+##      - ${LOCAL_LARAVEL_EXTERNAL_DIR}:/var/ext-configs
+#      - ${LOCAL_LARAVEL_DIR}:${REMOTE_LARAVEL_DIR}
+#    networks:
+#      - app-network
+#
+#  #Nginx Service
+#  nginx:
+#    image: nginx:alpine
+#    container_name: ${APP_NAME}_nginx
+#    restart: unless-stopped
+#    tty: true
+#    ports:
+#      - "${PORT_HTTP}:80"
+#      - "${PORT_HTTPS}:443"
+#    volumes:
+#      - ${LOCAL_LARAVEL_DIR}:/var/www/
+#      - ./nginx/conf.d/:/etc/nginx/conf.d/
+#      - ./nginx/ssl/:/etc/nginx/ssl/
+#    networks:
+#      - app-network
+#
+#    #MySQL Service
+#  db:
+#    image: mysql:5.7
+#    container_name: ${APP_NAME}_db
+#    restart: unless-stopped
+#    tty: true
+#    ports:
+#      - "${PORT_DATABASE}:3306"
+#    environment:
+#      MYSQL_DATABASE: ${MYSQL_DATABASE}
+#      #MYSQL_USER: ${MYSQL_USER}
+#      #MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+#      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+#    volumes:
+#      - mysqldata:/var/lib/mysql/
+#    networks:
+#      - app-network
+#
+##  mailcatcher:
+##    image: schickling/mailcatcher
+##    container_name: ${APP_NAME}_mailcatcher
+##    ports:
+##      - "${PORT_MAILCATCHER}:1080"
+##    networks:
+##      - app-network
+#
+##  redis:
+##    container_name: ${APP_NAME}_redis
+##    image: redis
+##    ports:
+##      - "${PORT_REDIS}:6379"
+##    volumes:
+##      - "./data/redis:/data"
+##    restart: always
+##    networks:
+##      - app-network
+#
+##  myadmin:
+##    image: phpmyadmin/phpmyadmin
+##    container_name: ${APP_NAME}_phpmyadmin
+##    ports:
+##      - ${PORT_PHPMYADMIN}:80
+##    restart: always
+##    links:
+##      - database:db
+##    depends_on:
+##      - database
+#
+##Volumes
+#volumes:
+#  mysqldata:
+#    driver: local
+#  laravel:
+#    driver: local
+#
+## Docker Networks
+#networks:
+#  app-network:
+#    driver: bridge
