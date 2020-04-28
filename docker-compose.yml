@@ -24,6 +24,15 @@ services:
     ports:
       - ${PORT_MAILCATCHER}:1080
 
+  redis:
+    container_name: ${APP_NAME}_redis
+    image: redis:5.0
+    ports:
+      - "${PORT_REDIS}:6379"
+    volumes:
+      - "./data/redis:/data"
+    restart: always
+
 # Networks
 networks:
   net1:
