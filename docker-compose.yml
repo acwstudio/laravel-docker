@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   # Database
-  database:
+  db:
     image: mysql:5.7
     container_name: ${APP_NAME}_mysql
     restart: always
@@ -32,6 +32,17 @@ services:
     volumes:
       - "./data/redis:/data"
     restart: always
+
+  myadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: ${APP_NAME}_phpmyadmin
+    ports:
+      - ${PORT_PHPMYADMIN}:80
+    restart: always
+    depends_on:
+      - db
+    networks:
+      - net1
 
 # Networks
 networks:
