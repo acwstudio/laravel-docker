@@ -18,6 +18,12 @@ services:
     networks:
       - net1
 
+  mailcatcher:
+    image: schickling/mailcatcher
+    container_name: ${APP_NAME}_mailcatcher
+    ports:
+      - ${PORT_MAILCATCHER}:1080
+
 # Networks
 networks:
   net1:
