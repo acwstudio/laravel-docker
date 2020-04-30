@@ -44,51 +44,49 @@ services:
     networks:
       - net1
 
+  php:
+    build:
+      context: ./etc/php
+      args:
+        ADD_ALIASES: ${ADD_ALIASES}
+        INSTALL_XDEBUG: ${INSTALL_XDEBUG}
+        PHP_VER_FPM: ${PHP_VER_FPM}
+    container_name: ${APP_NAME}_php
+#    entrypoint: sh /bin/entrypoint.sh php-fpm
+#    links:
+#      - database:mysqldb
+    restart: always
+    volumes:
+      - ./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini
+      - ${APP_PATH}:/var/www/html
+      - ./etc/log/nginx:/var/log/nginx
+#      - ./etc/php/entrypoint.sh:/bin/entrypoint.sh
+    networks:
+      - net1
+
+  #Nginx Service
+  web:
+    image: nginx:1.17-alpine
+    container_name: ${APP_NAME}_nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "${PORT_HTTP}:80"
+      - "${PORT_HTTPS}:443"
+    volumes:
+      - ./etc/nginx/conf.d/:/etc/nginx/conf.d/
+      - ./etc/nginx/ssl/:/etc/nginx/ssl/
+      - ${APP_PATH}/:/var/www/html
+    networks:
+      - net1
+
+
 # Networks
 networks:
   net1:
     name: ${APP_NAME}_net
 
-#  # App php-fpm service
-#  app:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#      args:
-#        APP_ENV: ${APP_ENV}
-#        PHP_VERSION_APP: ${PHP_VERSION}
-#        PHP_VERSION: ${PHP_VERSION}
-#        REMOTE_LARAVEL_DIR: ${REMOTE_LARAVEL_DIR}
-#        LOCAL_LARAVEL_DIR: ${LOCAL_LARAVEL_DIR}
-#    image: laravel/${APP_NAME}
-#    container_name: ${APP_NAME}_app
-#    restart: unless-stopped
-#    tty: true
-#    working_dir: ${REMOTE_LARAVEL_DIR}
-#    env_file:
-#      - .env
-#    volumes:
-##      - ${LOCAL_LARAVEL_STORAGE_DIR}:/var/storage
-##      - ${LOCAL_LARAVEL_EXTERNAL_DIR}:/var/ext-configs
-#      - ${LOCAL_LARAVEL_DIR}:${REMOTE_LARAVEL_DIR}
-#    networks:
-#      - app-network
-#
-#  #Nginx Service
-#  nginx:
-#    image: nginx:alpine
-#    container_name: ${APP_NAME}_nginx
-#    restart: unless-stopped
-#    tty: true
-#    ports:
-#      - "${PORT_HTTP}:80"
-#      - "${PORT_HTTPS}:443"
-#    volumes:
-#      - ${LOCAL_LARAVEL_DIR}:/var/www/
-#      - ./nginx/conf.d/:/etc/nginx/conf.d/
-#      - ./nginx/ssl/:/etc/nginx/ssl/
-#    networks:
-#      - app-network
+
 #
 #    #MySQL Service
 #  db:
