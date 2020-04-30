@@ -76,10 +76,19 @@ services:
     volumes:
       - ./etc/nginx/conf.d/:/etc/nginx/conf.d/
       - ./etc/nginx/ssl/:/etc/nginx/ssl/
-      - ${APP_PATH}/:/var/www/html
+      - ${APP_PATH}:/var/www/html
     networks:
       - net1
 
+  # Node.js
+  node:
+    image: node:13-alpine
+    container_name: ${APP_NAME}_node
+    restart: unless-stopped
+    volumes:
+      - ${APP_PATH}:/var/www/html
+    working_dir: /var/www/html
+    tty: true
 
 # Networks
 networks:
