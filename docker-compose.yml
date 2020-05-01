@@ -89,70 +89,10 @@ services:
       - ${APP_PATH}:/var/www/html
     working_dir: /var/www/html
     tty: true
+    networks:
+      - net1
 
 # Networks
 networks:
   net1:
     name: ${APP_NAME}_net
-
-
-#
-#    #MySQL Service
-#  db:
-#    image: mysql:5.7
-#    container_name: ${APP_NAME}_db
-#    restart: unless-stopped
-#    tty: true
-#    ports:
-#      - "${PORT_DATABASE}:3306"
-#    environment:
-#      MYSQL_DATABASE: ${MYSQL_DATABASE}
-#      #MYSQL_USER: ${MYSQL_USER}
-#      #MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-#      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-#    volumes:
-#      - mysqldata:/var/lib/mysql/
-#    networks:
-#      - app-network
-#
-##  mailcatcher:
-##    image: schickling/mailcatcher
-##    container_name: ${APP_NAME}_mailcatcher
-##    ports:
-##      - "${PORT_MAILCATCHER}:1080"
-##    networks:
-##      - app-network
-#
-##  redis:
-##    container_name: ${APP_NAME}_redis
-##    image: redis
-##    ports:
-##      - "${PORT_REDIS}:6379"
-##    volumes:
-##      - "./data/redis:/data"
-##    restart: always
-##    networks:
-##      - app-network
-#
-##  myadmin:
-##    image: phpmyadmin/phpmyadmin
-##    container_name: ${APP_NAME}_phpmyadmin
-##    ports:
-##      - ${PORT_PHPMYADMIN}:80
-##    restart: always
-##    links:
-##      - database:db
-##    depends_on:
-##      - database
-#
-##Volumes
-#volumes:
-#  mysqldata:
-#    driver: local
-#  laravel:
-#    driver: local
-#
-## Docker Networks
-#networks:
-#  app-network:
-#    driver: bridge
