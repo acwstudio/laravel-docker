@@ -53,8 +53,6 @@ services:
         PHP_VER_FPM: ${PHP_VER_FPM}
     container_name: ${APP_NAME}_php
 #    entrypoint: sh /bin/entrypoint.sh php-fpm
-#    links:
-#      - database:mysqldb
     restart: always
     volumes:
       - ./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini
@@ -78,7 +76,8 @@ services:
       - ./etc/nginx/ssl/:/etc/nginx/ssl/
       - ${APP_PATH}:/var/www/html
     networks:
-      - net1
+      net1:
+        ipv4_address: 192.168.176.9
 
   # Node.js
   node:
