@@ -1,4 +1,4 @@
-version: '3.5'
+version: '3.7'
 services:
   # Database
   db:
@@ -16,13 +16,15 @@ services:
       - "./data/db/mysql:/var/lib/mysql"
       - "./etc/mysql:/etc/mysql/conf.d"
     networks:
-      - net1
+      laravel-net:
 
   mailcatcher:
     image: schickling/mailcatcher
     container_name: ${APP_NAME}_mailcatcher
     ports:
       - ${PORT_MAILCATCHER}:1080
+    networks:
+      laravel-net:
 
   redis:
     container_name: ${APP_NAME}_redis
@@ -32,6 +34,8 @@ services:
     volumes:
       - "./data/redis:/data"
     restart: always
+    networks:
+      laravel-net:
 
   myadmin:
     image: phpmyadmin/phpmyadmin
@@ -42,7 +46,7 @@ services:
     depends_on:
       - db
     networks:
-      - net1
+      laravel-net:
 
   php:
     build:
@@ -60,7 +64,7 @@ services:
       - ./etc/log/nginx:/var/log/nginx
 #      - ./etc/php/entrypoint.sh:/bin/entrypoint.sh
     networks:
-      - net1
+      laravel-net:
 
   #Nginx Service
   web:
@@ -73,11 +77,10 @@ services:
       - "${PORT_HTTPS}:443"
     volumes:
       - ./etc/nginx/conf.d/:/etc/nginx/conf.d/
-      - ./etc/nginx/ssl/:/etc/nginx/ssl/
       - ${APP_PATH}:/var/www/html
     networks:
-      net1:
-        ipv4_address: 192.168.176.9
+      laravel-net:
+      reverse-net:
 
   # Node.js
   node:
@@ -89,9 +92,11 @@ services:
     working_dir: /var/www/html
     tty: true
     networks:
-      - net1
+      laravel-net:
 
 # Networks
 networks:
-  net1:
-    name: ${APP_NAME}_net
+  laravel-net:
+    name: laravel-net
+  reverse-net:
+    name: reverse-net
