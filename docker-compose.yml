@@ -97,6 +97,6 @@ services:
 # Networks
 networks:
   laravel-net:
-    name: laravel-net
+    name: ${APP_NAME}-net
   reverse-net:
     name: reverse-net
