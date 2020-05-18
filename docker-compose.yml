@@ -21,6 +21,7 @@ services:
   mailcatcher:
     image: schickling/mailcatcher
     container_name: ${APP_NAME}_mailcatcher
+    restart: always
     ports:
       - ${PORT_MAILCATCHER}:1080
     networks:
