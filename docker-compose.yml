@@ -18,36 +18,37 @@ services:
     networks:
       laravel-net:
 
-  mailcatcher:
-    image: schickling/mailcatcher
-    container_name: ${APP_NAME}_mailcatcher
-    restart: always
-    ports:
-      - ${PORT_MAILCATCHER}:1080
-    networks:
-      laravel-net:
+#  mailcatcher:
+#    image: schickling/mailcatcher
+#    container_name: ${APP_NAME}_mailcatcher
+#    restart: always
+#    ports:
+#      - ${PORT_MAILCATCHER}:1080
+#    networks:
+#      laravel-net:
 
-  redis:
-    container_name: ${APP_NAME}_redis
-    image: redis:5.0
-    ports:
-      - "${PORT_REDIS}:6379"
-    volumes:
-      - "./data/redis:/data"
-    restart: always
-    networks:
-      laravel-net:
+# **** Redis needs production config
+#  redis:
+#    container_name: ${APP_NAME}_redis
+#    image: redis
+#    ports:
+#      - "${PORT_REDIS}:6379"
+#    volumes:
+#      - "./data/redis:/data"
+#    restart: always
+#    networks:
+#      laravel-net:
 
-  myadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: ${APP_NAME}_phpmyadmin
-    ports:
-      - ${PORT_PHPMYADMIN}:80
-    restart: always
-    depends_on:
-      - db
-    networks:
-      laravel-net:
+#  myadmin:
+#    image: phpmyadmin/phpmyadmin
+#    container_name: ${APP_NAME}_phpmyadmin
+#    ports:
+#      - ${PORT_PHPMYADMIN}:80
+#    restart: always
+#    depends_on:
+#      - db
+#    networks:
+#      laravel-net:
 
   php:
     build:
