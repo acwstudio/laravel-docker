@@ -21,7 +21,7 @@ services:
   # PHP-FPM
   php:
     build:
-      context: ./etc/php
+      context: .
       args:
         ADD_ALIASES: ${ADD_ALIASES}
         INSTALL_XDEBUG: ${INSTALL_XDEBUG}
