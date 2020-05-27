@@ -14,7 +14,6 @@ services:
       - ${PORT_DATABASE}:3306
     volumes:
       - "./data/db/mysql:/var/lib/mysql"
-      - "./etc/mysql:/etc/mysql/conf.d"
     networks:
       laravel-net:
 
@@ -31,7 +30,6 @@ services:
     volumes:
       - ./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini
       - ${APP_PATH}:/var/www/html
-      - ./etc/log/nginx:/var/log/nginx
     networks:
       laravel-net:
 
