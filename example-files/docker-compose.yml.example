@@ -74,13 +74,13 @@ services:
 # **** Redis needs production config
   redis:
     container_name: ${APP_NAME}_redis
-    image: redis
+    image: redis:alpine
     ports:
       - "${PORT_REDIS}:6379"
     volumes:
       - "./data/redis:/data"
       - "./etc/redis/redis.conf:/etc/redis/redis.conf"
-    restart: always
+    restart: unless-stopped
     networks:
       laravel-net:
 
