@@ -14,7 +14,7 @@ services:
       - ${PORT_DATABASE}:3306
     volumes:
       - "./data/db/mysql:/var/lib/mysql"
-      - "./etc/db/mysql/:/etc/mysql/"
+      - "./etc/db/mysql/my.cnf:/etc/mysql/my.cnf"
     networks:
       laravel-net:
 
