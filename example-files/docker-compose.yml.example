@@ -62,24 +62,15 @@ services:
     networks:
       laravel-net:
 
-  mailcatcher:
-    image: schickling/mailcatcher
-    container_name: ${APP_NAME}_mailcatcher
-    restart: unless-stopped
-    ports:
-      - ${PORT_MAILCATCHER}:1080
-    networks:
-      laravel-net:
-
 # **** Redis needs production config
   redis:
+    build:
+      context: ./etc/redis
     container_name: ${APP_NAME}_redis
-    image: redis:alpine
     ports:
       - "${PORT_REDIS}:6379"
     volumes:
       - "./data/redis:/data"
-      - "./etc/redis/redis.conf:/etc/redis/redis.conf"
     restart: unless-stopped
     networks:
       laravel-net:
