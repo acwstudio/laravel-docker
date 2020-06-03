@@ -11,3 +11,4 @@ It includes these services:
 7. Node.js
 
 ## Quick start ##
+see [how to use](http://acwstudio.github.io/laravel-docker.html)
