@@ -30,7 +30,8 @@ RUN apk update && apk add --no-cache \
     php7-dom \
     php7-session \
     php7-zlib \
-    php7-iconv
+    php7-iconv \
+    php7-intl
 
 ARG PHP_VER_FPM
 
