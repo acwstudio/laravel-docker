@@ -41,7 +41,8 @@ RUN if [ "${PHP_VER_FPM}" = "7.4" ]; then \
    libjpeg-turbo-dev \
    libpng-dev && \
    docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ && \
-   docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) gd; \
+   docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) gd && \
+   docker-php-ext-install sockets; \
 fi
 
 RUN if [ "${PHP_VER_FPM}" = "7.2" ]; then \
