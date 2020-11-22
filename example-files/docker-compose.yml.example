@@ -75,6 +75,25 @@ services:
     networks:
       laravel-net:
 
+  # **** rabbitmq
+  rabbitmq:
+    build:
+      context: ./etc/rabbitmq
+    container_name: ${APP_NAME}_rabbitmq
+    volumes:
+      - ./data/rabbitmq/:/var/lib/rabbitmq/
+      - ./data/rabbitmq/logs/:/var/log/rabbitmq/
+    environment:
+      RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERLANG_COOKIE}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - 5672:5672
+      - 15672:15672
+    restart: unless-stopped
+    networks:
+      laravel-net:
+
   myadmin:
     image: phpmyadmin/phpmyadmin
     container_name: ${APP_NAME}_phpmyadmin
