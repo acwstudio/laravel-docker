@@ -56,6 +56,11 @@ fi
 
 # Install extensions
 RUN docker-php-ext-install pdo pdo_mysql zip exif pcntl
+
+RUN pecl install -o -f redis \
+&&  rm -rf /tmp/pear \
+&&  docker-php-ext-enable redis
+
 ENV LD_PRELOAD="/usr/lib/preloadable_libiconv.so php-fpm7 php"
 
 # Install PHP Composer
