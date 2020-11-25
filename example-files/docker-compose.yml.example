@@ -1,6 +1,7 @@
 version: '3.7'
 services:
-  # Database
+  # Database mysql 5.7
+  # If connection refuse run cli command - alter USER 'root'@'localhost' identified by 'password'
   db:
     image: mysql:5.7
     container_name: ${APP_NAME}_mysql
@@ -17,6 +18,25 @@ services:
       - "./etc/db/mysql/my.cnf:/etc/mysql/my.cnf"
     networks:
       laravel-net:
+
+  # Database mysql 8
+  db8:
+    image: mysql/mysql-server
+    container_name: ${APP_NAME}_mysql8
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - ${PORT_DATABASE}:3306
+    volumes:
+      - "./data/db/mysql:/var/lib/mysql"
+      - "./etc/db/mysql/my.cnf:/etc/mysql/my.cnf"
+    networks:
+      laravel-net:
+
 
   # PHP-FPM
   php:
