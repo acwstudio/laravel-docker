@@ -46,6 +46,8 @@ services:
         ADD_ALIASES: ${ADD_ALIASES}
         INSTALL_XDEBUG: ${INSTALL_XDEBUG}
         PHP_VER_FPM: ${PHP_VER_FPM}
+    depends_on:
+      - mailhog
     container_name: ${APP_NAME}_php
     restart: unless-stopped
     volumes:
@@ -94,6 +96,18 @@ services:
     restart: unless-stopped
     networks:
       laravel-net:
+
+  # **** fake mailer
+  mailhog:
+    image: mailhog/mailhog
+    container_name: ${APP_NAME}_mailer
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    restart: unless-stopped
+    networks:
+      laravel-net:
+
 
   # **** rabbitmq
   rabbitmq:
